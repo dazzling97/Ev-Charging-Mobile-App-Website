@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EV Charging App - Hassle Free EV Charging</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: {
+              100: '#F6FFDF',
+              400: '#DAFF74',
+              500: '#C6FF29',
+            },
+            secondary: {
+              50: '#F4F4F4',
+              100: '#DEDEDE',
+              200: '#BEBEBE',
+              500: '#262626',
+              950: '#0A0A0A',
+            },
+            glass: {
+              bg: 'rgba(96, 98, 113, 0.08)',
+              'bg-strong': 'rgba(96, 98, 113, 0.12)',
+              border: '#3F404C',
+            },
+          },
+          fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+            inter: ['Inter', 'sans-serif'],
+            dm: ['DM Sans', 'sans-serif'],
+          },
+          maxWidth: {
+            container: '1288px',
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Animated Favicon -->
+  <link rel="icon" id="favicon" href="assets/icons/favicon-green.png" type="image/png" />
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body class="bg-secondary-950 text-white font-poppins overflow-x-hidden">
+  <!-- Shared filter for primary CTA snake border glow (design system primary-500) -->
+  <svg class="absolute w-0 h-0 overflow-hidden" aria-hidden="true" focusable="false">
+    <defs>
+      <filter id="btn-glow-primary" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="blur" />
+        <feFlood flood-color="#C6FF29" flood-opacity="0.8" result="color" />
+        <feComposite in="color" in2="blur" operator="in" result="glow" />
+        <feMerge>
+          <feMergeNode in="glow" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- ===================== NAVIGATION ===================== -->
+  <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300">
+    <div class="max-w-container mx-auto px-[76px] py-5 flex items-center justify-between max-lg:px-6 max-md:px-4">
+      <a href="#" class="flex items-center">
+        <img src="images/logo.png" alt="EV Logo" class="h-6" />
+      </a>
+      <div class="hidden lg:flex items-center gap-8">
+        <a href="#" class="text-sm text-secondary-50 hover:text-primary-400 transition-colors">Home</a>
+        <a href="#on-the-go" class="text-sm text-secondary-200 hover:text-primary-400 transition-colors">On the go</a>
+        <a href="#full-control" class="text-sm text-secondary-200 hover:text-primary-400 transition-colors">At home</a>
+        <a href="#features" class="text-sm text-secondary-200 hover:text-primary-400 transition-colors">Features</a>
+        <a href="#testimonials" class="text-sm text-secondary-200 hover:text-primary-400 transition-colors">Why us</a>
+        <a href="#pricing" class="text-sm text-secondary-200 hover:text-primary-400 transition-colors">&#10022;
+          Premium</a>
+      </div>
+      <a href="#"
+        class="btn-primary-cta hidden lg:flex items-center justify-center px-6 py-2.5 bg-primary-400 text-secondary-950 text-sm font-semibold rounded-lg hover:bg-primary-500 transition-colors">
+        Get the app
+      </a>
+      <button id="mobile-menu-btn" class="lg:hidden flex flex-col gap-1.5 p-2">
+        <span class="block w-6 h-0.5 bg-white transition-all duration-300 origin-center" id="hamburger-1"></span>
+        <span class="block w-6 h-0.5 bg-white transition-all duration-300" id="hamburger-2"></span>
+        <span class="block w-6 h-0.5 bg-white transition-all duration-300 origin-center" id="hamburger-3"></span>
+      </button>
+    </div>
+    <div id="mobile-menu" class="lg:hidden hidden bg-secondary-950/95 backdrop-blur-lg border-t border-glass-border">
+      <div class="flex flex-col items-center gap-6 py-8">
+        <a href="#" class="text-base text-secondary-50 hover:text-primary-400 transition-colors">Home</a>
+        <a href="#on-the-go" class="text-base text-secondary-200 hover:text-primary-400 transition-colors">On the go</a>
+        <a href="#full-control" class="text-base text-secondary-200 hover:text-primary-400 transition-colors">At
+          home</a>
+        <a href="#features" class="text-base text-secondary-200 hover:text-primary-400 transition-colors">Features</a>
+        <a href="#" class="btn-primary-cta px-6 py-3 bg-primary-400 text-secondary-950 text-sm font-semibold rounded-lg hover:bg-primary-500 transition-colors">Get the app</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===================== HERO SECTION ===================== -->
+  <section id="hero" class="relative min-h-[760px] max-md:min-h-0 overflow-hidden">
+    <!-- Map Background (CSS background-image) -->
+    <div class="absolute inset-0 hero-map-bg" id="hero-map">
+      <div class="absolute inset-0 bg-gradient-to-r from-secondary-950/80 via-secondary-950/40 to-transparent"></div>
+    </div>
+
+    <div
+      class="relative max-w-container mx-auto px-[76px] pt-[177px] pb-[80px] flex items-start gap-20 max-lg:px-6 max-md:px-4 max-lg:flex-col max-lg:pt-[120px]">
+      <!-- Left Content -->
+      <div class="flex flex-col gap-5 max-w-[686px] z-10">
+        <div class="flex flex-col gap-[52px]">
+          <div class="flex flex-col gap-6">
+            <h1
+              class="text-[60px] leading-[60px] font-semibold text-primary-100 max-lg:text-[40px] max-lg:leading-[49px] hero-title">
+              Hassle free EV charging, <span class="text-primary-400">wherever you go</span>
+            </h1>
+            <p class="text-base text-secondary-50 max-w-[651px] max-md:text-sm hero-subtitle">
+              Get the app to find nearby EV chargers, get notified when one's available, and explore 1,000+ charging
+              stations with ease.
+            </p>
+          </div>
+          <div class="flex gap-4 items-center max-md:gap-3 hero-buttons">
+            <a href="#"
+              class="btn-primary-cta flex items-center justify-center px-[16px] py-[16px] w-[185px] bg-primary-400 border border-primary-400/80 text-secondary-950 text-base max-md:text-sm font-semibold rounded-lg hover:bg-primary-500 transition-colors max-md:flex-1 max-md:w-auto">
+              Get the app
+            </a>
+            <a href="#"
+              class="flex items-center justify-center px-[16px] py-[16px] w-[185px] bg-[rgba(218,255,116,0.1)] border border-white/20 text-secondary-50 text-base max-md:text-sm font-semibold rounded-lg hover:bg-[rgba(218,255,116,0.2)] transition-colors max-md:flex-1 max-md:w-auto">
+              See How It Works
+            </a>
+          </div>
+        </div>
+        <p class="text-sm text-secondary-200 hero-note">**Available on App store and plays store</p>
+
+        <!-- Stats -->
+        <div class="flex gap-0 items-center mt-4 max-md:justify-between max-md:gap-0 hero-stats">
+          <div class="flex flex-col gap-1 pr-12 max-md:pr-0">
+            <span class="text-2xl font-semibold text-white max-md:font-medium counter" data-target="1200">1200+</span>
+            <span class="text-xs text-secondary-200 max-md:text-base">Locations</span>
+          </div>
+          <div
+            class="flex flex-col gap-1 px-12 border-l border-secondary-200/30 max-md:px-0 max-md:border-l-0 max-md:items-center">
+            <span class="text-2xl font-semibold text-white max-md:font-medium counter" data-target="6000">6000+</span>
+            <span class="text-xs text-secondary-200 max-md:text-base">Chargers</span>
+          </div>
+          <div
+            class="flex flex-col gap-1 pl-12 border-l border-secondary-200/30 max-md:pl-0 max-md:border-l-0 max-md:items-end">
+            <span class="text-2xl font-semibold text-white max-md:font-medium">1M+</span>
+            <span class="text-xs text-secondary-200 max-md:text-base">Active users</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Side - Route Path & Car Animation (Figma design: 405×473 road shape) -->
+      <div class="relative flex-shrink-0 w-[405px] h-[473px] max-lg:hidden" id="hero-route-area">
+        <!-- SVG Route Path from Figma: filled road + stroked outline (stroke path = motion path) -->
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 405 473" class="absolute inset-0 w-full h-full"
+          id="hero-route-svg" fill="none">
+          <defs>
+            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+            <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" style="stop-color:#C6FF29;stop-opacity:0.6" />
+              <stop offset="100%" style="stop-color:#C6FF29;stop-opacity:0" />
+            </radialGradient>
+          </defs>
+
+          <!-- Figma: filled road shape -->
+          <path fill-rule="evenodd" clip-rule="evenodd" fill="#C6FF29"
+            d="M3.14985 383.528C3.524 382.717 4.48473 382.363 5.2957 382.737L53.288 404.878L53.2922 404.88L96.3765 424.907L107.223 419.614C107.707 419.378 108.277 419.398 108.743 419.668L146.151 441.336C146.192 441.359 146.232 441.385 146.271 441.412L176.059 462.348L184.168 466.407L206.185 466.216L219.607 450.405L223.112 437.233L220.08 433.908C219.576 433.356 219.516 432.53 219.936 431.912L257.969 375.765C258.164 375.477 258.446 375.26 258.774 375.145L268.587 371.716L298.72 325.721C298.833 325.549 298.977 325.4 299.146 325.282L312.075 316.229L342.618 272.756C342.638 272.728 342.659 272.7 342.681 272.672L366.187 243.451C366.212 243.419 366.239 243.388 366.267 243.358L382.119 226.448L336.49 170.985C336.445 170.931 336.404 170.873 336.367 170.813L332.634 164.827L322.751 150.508C322.254 149.788 322.42 148.803 323.125 148.286L335.413 139.269L327.574 130.498C327.251 130.137 327.107 129.651 327.181 129.173C327.255 128.695 327.539 128.275 327.955 128.029L368.88 103.777C368.969 103.725 369.061 103.681 369.158 103.646L397.632 93.4186L387.027 62.5151C386.99 62.4068 386.964 62.2949 386.951 62.1812L380.128 4.80855C380.023 3.92168 380.656 3.11724 381.543 3.01175C382.43 2.90627 383.234 3.53973 383.34 4.4266L390.142 61.6282L401.208 93.8767C401.495 94.713 401.057 95.6247 400.225 95.9235L370.396 106.638L331.296 129.809L339.012 138.442C339.315 138.782 339.462 139.234 339.414 139.688C339.367 140.141 339.13 140.554 338.763 140.823L326.305 149.964L335.317 163.02C335.331 163.041 335.345 163.062 335.358 163.083L339.055 169.012L385.52 225.49C386.036 226.117 386.006 227.03 385.451 227.623L368.668 245.525L345.234 274.659L314.558 318.321C314.45 318.474 314.316 318.608 314.163 318.716L301.255 327.753L270.992 373.948C270.797 374.246 270.509 374.471 270.173 374.588L260.346 378.022L223.328 432.67L226.097 435.706C226.467 436.113 226.606 436.68 226.465 437.212L222.639 451.589C222.577 451.821 222.464 452.037 222.309 452.22L208.172 468.874C207.868 469.232 207.423 469.44 206.953 469.444L183.807 469.644C183.551 469.646 183.298 469.588 183.069 469.473L174.504 465.186C174.432 465.15 174.363 465.109 174.298 465.063L144.469 444.099L107.867 422.898L97.1027 428.152C96.6647 428.366 96.1537 428.37 95.7117 428.165L51.9331 407.815L51.9289 407.813L3.94081 385.674C3.12983 385.3 2.77571 384.339 3.14985 383.528Z" />
+          <!-- Figma: stroked outline — used as motion path + draw animation -->
+          <path id="car-motion-path"
+            d="M3.31221 387.036C1.74936 386.315 1.06644 384.463 1.78727 382.9C2.50844 381.337 4.3607 380.654 5.92389 381.375L53.9166 403.516L53.9176 403.517L53.922 403.519L53.9246 403.52L96.3604 423.246L106.565 418.266C107.498 417.811 108.596 417.849 109.494 418.37L146.903 440.038C146.982 440.083 147.059 440.132 147.133 440.185L176.829 461.057L184.518 464.904L205.486 464.723L218.244 449.692L221.452 437.638L218.971 434.919C218.001 433.854 217.886 432.263 218.693 431.07L256.727 374.923C257.103 374.369 257.647 373.95 258.279 373.729L267.612 370.469L297.465 324.898C297.628 324.65 297.825 324.426 298.05 324.234L298.286 324.053L310.998 315.153L341.39 271.894C341.429 271.839 341.47 271.785 341.512 271.732L365.018 242.511L365.172 242.333L380.124 226.383L335.332 171.938C335.245 171.833 335.166 171.722 335.094 171.607L331.383 165.658L321.517 151.361C320.559 149.973 320.879 148.075 322.238 147.077L333.193 139.038L326.456 131.497C325.834 130.802 325.557 129.865 325.699 128.944C325.841 128.023 326.388 127.214 327.19 126.739L368.116 102.487C368.285 102.386 368.464 102.301 368.651 102.234L395.732 92.5072L385.608 63.0017C385.537 62.7931 385.487 62.5775 385.461 62.3583L378.639 4.98537C378.436 3.27595 379.657 1.72568 381.366 1.52237C383.075 1.31922 384.626 2.54032 384.829 4.24967L391.612 61.2927L402.627 93.3901C403.18 95.0019 402.336 96.7593 400.732 97.3353L371.036 108.002L333.63 130.17L340.13 137.442C340.715 138.098 340.998 138.97 340.906 139.844C340.815 140.718 340.358 141.513 339.65 142.033L328.366 150.311L336.551 162.168L336.553 162.171L336.631 162.289L340.273 168.132L386.678 224.537C387.673 225.746 387.616 227.506 386.545 228.649L369.802 246.509L346.43 275.564L315.785 319.183C315.629 319.405 315.445 319.606 315.238 319.779L315.023 319.945L302.35 328.817L272.247 374.77C271.87 375.344 271.315 375.778 270.667 376.004L261.309 379.274L225.232 432.533L227.205 434.695C227.919 435.479 228.187 436.572 227.914 437.597L224.088 451.975C223.984 452.366 223.805 452.733 223.561 453.055L223.453 453.19L209.315 469.844C208.729 470.535 207.872 470.936 206.966 470.944L183.82 471.144C183.326 471.148 182.839 471.036 182.398 470.815L173.832 466.528C173.694 466.459 173.561 466.379 173.435 466.291L143.661 445.365L107.807 424.597L97.7603 429.5C96.9162 429.912 95.9314 429.921 95.0796 429.525L51.3012 409.176L51.2993 409.175L3.31221 387.036Z"
+            fill="none" stroke="#C6FF29" stroke-opacity="0.2" stroke-width="3" stroke-linecap="round"
+            stroke-linejoin="round" stroke-dasharray="2000" stroke-dashoffset="2000" filter="url(#glow)"
+            class="hero-route-line" />
+
+          <!-- Glow at route start (Figma coords) -->
+          <circle cx="50" cy="405" r="40" fill="url(#glowGrad)" class="hero-glow-start" opacity="0" />
+          <!-- Waypoint markers along the road -->
+          <g class="hero-waypoint" opacity="0">
+            <circle cx="107" cy="424" r="8" fill="#C6FF29" opacity="0.3" />
+            <circle cx="107" cy="424" r="4" fill="#C6FF29" />
+          </g>
+          <g class="hero-waypoint" opacity="0">
+            <circle cx="218" cy="450" r="8" fill="#C6FF29" opacity="0.3" />
+            <circle cx="218" cy="450" r="4" fill="#C6FF29" />
+          </g>
+          <g class="hero-waypoint" opacity="0">
+            <circle cx="268" cy="372" r="8" fill="#C6FF29" opacity="0.3" />
+            <circle cx="268" cy="372" r="4" fill="#C6FF29" />
+          </g>
+          <g class="hero-waypoint" opacity="0">
+            <circle cx="370" cy="107" r="8" fill="#C6FF29" opacity="0.3" />
+            <circle cx="370" cy="107" r="4" fill="#C6FF29" />
+          </g>
+          <!-- Glow at route end -->
+          <circle cx="396" cy="93" r="40" fill="url(#glowGrad)" class="hero-glow-end" opacity="0" />
+        </svg>
+
+        <!-- Car Image (animated along path via GSAP MotionPathPlugin) -->
+        <div class="absolute w-[47px] z-10" id="hero-car"
+          style="opacity:0; transform: translate(370px, 90px) rotate(-45deg);">
+          <img src="images/hero-section-car.png" alt="Car" class="w-full rotate-180" />
+        </div>
+
+        <!-- Location Markers (green pin icons) -->
+        <div class="hero-marker absolute w-5 h-6" style="top: 12%; left: 68%;">
+          <img src="images/ellipse-marker.svg" alt="marker" class="w-full h-full" />
+        </div>
+        <div class="hero-marker absolute w-4 h-5" style="top: 36%; left: 50%;">
+          <img src="images/ellipse-marker.svg" alt="marker" class="w-full h-full" />
+        </div>
+        <div class="hero-marker absolute w-4 h-5" style="top: 58%; left: 73%;">
+          <img src="images/ellipse-marker.svg" alt="marker" class="w-full h-full" />
+        </div>
+        <div class="hero-marker absolute w-4 h-5" style="top: 82%; left: 58%;">
+          <img src="images/ellipse-marker.svg" alt="marker" class="w-full h-full" />
+        </div>
+
+        <!-- Floating Station Popup Card (only ONE card - appears when car reaches destination) -->
+        <div class="glass-card absolute w-[280px] p-4 z-20" id="hero-popup-card"
+          style="top: 2%; left: 55%; opacity: 0;">
+          <div class="flex flex-col gap-1">
+            <div class="flex items-center gap-1">
+              <div class="w-2 h-2 rounded-full bg-primary-500"></div>
+              <span class="text-xs text-secondary-200 font-inter">Selected station</span>
+            </div>
+            <p class="text-base font-bold text-secondary-100 font-inter">Keels, Charging hub</p>
+            <p class="text-[10px] text-secondary-200 font-inter">keels, Highlevel road, colombo 10</p>
+          </div>
+          <p class="text-sm font-semibold text-white mt-2">2 Connectors available</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CHARGING UPDATES SECTION ===================== -->
+  <section id="charging-updates" class="relative py-0 max-lg:py-16 max-md:py-0 overflow-hidden">
+    <!-- Gradient Orbs (decorative foreground elements) -->
+    <div class="gradient-orb absolute -left-[160px] top-0 w-[558px] h-[558px]"
+      style="background: radial-gradient(circle, rgba(198,255,41,0.06) 0%, transparent 70%);"></div>
+    <div class="gradient-orb absolute left-[555px] top-[190px] w-[733px] h-[733px]"
+      style="background: radial-gradient(circle, rgba(198,255,41,0.04) 0%, transparent 70%);"></div>
+
+    <div class="max-w-container mx-auto px-[76px] max-lg:px-6 max-md:px-4">
+      <div class="flex items-start gap-0 max-lg:flex-col max-lg:gap-10">
+        <!-- Left - Full Background Image with Charging Card Overlay -->
+        <div
+          class="relative xl:w-[700px] w-[55%] min-h-[654px] flex-shrink-0 max-lg:w-full max-lg:min-h-[400px] charging-image-area">
+          <!-- Background Image (CSS background, not <img>) -->
+          <div class="absolute inset-0 rounded-xl overflow-hidden charging-bg-image">
+            <div class="absolute inset-0 bg-gradient-to-t from-secondary-950/60 via-transparent to-transparent"></div>
+          </div>
+
+          <!-- Charging Status Card Overlay (SINGLE card) -->
+          <div
+            class="glass-card absolute top-[40px] left-[140px] max-xl:left-[72px] w-[353px] p-5 z-10 max-md:relative max-md:top-0 max-md:left-0 max-md:w-full max-md:mt-4 charging-card"
+            id="charging-detail-card">
+            <div class="flex flex-col gap-1">
+              <div class="flex items-center gap-1">
+                <div class="w-2.5 h-2.5 rounded-full bg-primary-500"></div>
+                <span class="text-sm text-secondary-200 font-inter">Selected station</span>
+              </div>
+              <p class="text-xl font-bold text-secondary-100 font-inter tracking-[0.05px]">Keels, Charging hub</p>
+              <p class="text-xs text-secondary-200 font-inter">keels, Highlevel road, colombo 10</p>
+            </div>
+            <p class="text-sm text-white tracking-[0.28px] mt-4">Session progress</p>
+            <div class="w-full h-[3px] bg-secondary-500 rounded-full mt-2 overflow-hidden">
+              <div class="h-full bg-primary-500 rounded-full progress-bar" id="charging-progress-bar" style="width: 0%">
+              </div>
+            </div>
+            <div class="flex flex-col gap-1 mt-4">
+              <p class="text-base font-medium tracking-[0.32px]">
+                <span class="text-primary-500 charge-counter" id="charge-counter">0</span>
+                <span class="text-white"> min remaining</span>
+              </p>
+              <p class="text-xs text-secondary-200 font-inter">Charging at 7kW</p>
+            </div>
+          </div>
+
+          <!-- Dotted line from card to bottom -->
+          <svg class="absolute left-[315px] max-xl:left-[247px] top-[280px] w-[4px] h-[140px] z-[5] max-lg:hidden"
+            id="charging-dotted-line">
+            <line x1="2" y1="0" x2="2" y2="140" stroke="#BEBEBE" stroke-width="2" stroke-dasharray="8 8"
+              stroke-dashoffset="140" />
+          </svg>
+
+          <!-- Green dot at end of dotted line -->
+          <div class="absolute left-[310px] max-xl:left-[242px] bottom-[226px] w-3 h-3 rounded-full bg-primary-500 z-[5] max-lg:hidden"
+            id="charging-endpoint" style="opacity:0;"></div>
+        </div>
+
+        <!-- Right - Title + Feature Cards -->
+        <div class="flex flex-col gap-8 flex-1 pt-[40px] max-lg:pt-0">
+          <div class="flex flex-col gap-[17px] charging-title">
+            <h2
+              class="text-[40px] leading-[44px] font-semibold text-secondary-100 max-xl:text-[32px] max-xl:leading-[38px] max-md:text-[32px] max-md:leading-[44px]">
+              Charging updates that keep <span class="text-primary-400">you in control</span>
+            </h2>
+            <p class="text-base text-secondary-100 max-w-[433px]">
+              Track your charging session in real time and leave with confidence.
+            </p>
+          </div>
+
+          <!-- Feature Info Cards 2x2 -->
+          <div class="grid grid-cols-2 gap-3 max-md:grid-cols-1">
+            <div class="glass-card-small p-5 flex flex-col gap-3 charging-feature-card">
+              <div class="w-8 h-8 flex items-center justify-center">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6FF29" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0110 0v4" />
+                </svg>
+              </div>
+              <p class="text-base font-semibold text-secondary-100 font-inter">Secure in-app payments</p>
+              <p class="text-sm text-secondary-200 font-inter">Pay safely and securely from within the app.</p>
+            </div>
+            <div class="glass-card-small p-5 flex flex-col gap-3 charging-feature-card">
+              <div class="w-8 h-8 flex items-center justify-center">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6FF29" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 8v4l3 3" />
+                </svg>
+              </div>
+              <p class="text-base font-semibold text-secondary-100 font-inter">Reliable real-time availability</p>
+              <p class="text-sm text-secondary-200 font-inter">See live charger status before you arrive.</p>
+            </div>
+            <div class="glass-card-small p-5 flex flex-col gap-3 charging-feature-card">
+              <div class="w-8 h-8 flex items-center justify-center">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6FF29" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 00-3-3.87" />
+                  <path d="M16 3.13a4 4 0 010 7.75" />
+                </svg>
+              </div>
+              <p class="text-base font-semibold text-secondary-100 font-inter">Designed for everyday EV drivers</p>
+              <p class="text-sm text-secondary-200 font-inter">Simple, intuitive interface for daily use.</p>
+            </div>
+            <div class="glass-card-small p-5 flex flex-col gap-3 charging-feature-card">
+              <div class="w-8 h-8 flex items-center justify-center">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6FF29" stroke-width="1.5"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                </svg>
+              </div>
+              <p class="text-base font-semibold text-secondary-100 font-inter">Works across public and home charging</p>
+              <p class="text-sm text-secondary-200 font-inter">One app for all your charging needs.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== ON-THE-GO CHARGING SECTION ===================== -->
+  <section id="on-the-go" class="relative py-[80px] max-lg:py-16">
+    <div class="max-w-container mx-auto px-[76px] max-lg:px-6 max-md:px-4">
+      <!-- Glassmorphism container matching Figma Frame 15 -->
+      <div
+        class="relative bg-[rgba(96,98,113,0.05)] backdrop-blur-[12px] rounded-[20px] overflow-hidden p-[20px] max-lg:p-4">
+        <!-- Decorative gradient orbs -->
+        <div class="absolute -left-[160px] -top-[61px] w-[558px] h-[558px] rounded-full pointer-events-none"
+          style="background: radial-gradient(circle, rgba(198,255,41,0.06) 0%, transparent 70%);"></div>
+        <div class="absolute left-[555px] top-[190px] w-[733px] h-[733px] rounded-full pointer-events-none"
+          style="background: radial-gradient(circle, rgba(198,255,41,0.04) 0%, transparent 70%);"></div>
+        <div class="absolute left-[799px] top-[319px] w-[547px] h-[547px] rounded-full pointer-events-none"
+          style="background: radial-gradient(circle, rgba(198,255,41,0.04) 0%, transparent 70%);"></div>
+
+        <div class="relative flex items-start gap-8 max-lg:flex-col max-lg:gap-10">
+          <!-- Left Content -->
+          <div
+            class="flex flex-col gap-12 flex-1 pt-[78px] pl-[62px] pb-[40px] max-lg:pt-8 max-lg:pl-4 max-lg:pb-4 max-md:pt-0 max-md:pl-0 max-md:pb-0 max-md:gap-[48px] otg-content">
+            <div class="flex flex-col gap-6">
+              <div
+                class="inline-flex items-center justify-center px-2.5 py-3 bg-[rgba(198,255,41,0.2)] rounded-lg w-fit">
+                <span class="text-sm text-white tracking-[-0.28px]">On the Go Charging</span>
+              </div>
+              <div class="flex flex-col gap-8">
+                <div class="flex flex-col gap-4">
+                  <h2
+                    class="text-[40px] leading-[44px] font-semibold text-primary-100 tracking-[-0.4px] max-md:text-[32px] max-md:leading-[44px]">
+                    Charge on the go, without the guesswork
+                  </h2>
+                  <p class="text-sm leading-6 text-secondary-100">
+                    Find reliable chargers nearby and start charging with confidence.
+                  </p>
+                </div>
+                <div class="flex flex-col gap-[15px]">
+                  <div class="flex items-start gap-2">
+                    <div
+                      class="w-[21px] h-[21px] rounded-full bg-primary-500 flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <span class="text-sm font-medium text-secondary-950">1</span>
+                    </div>
+                    <p class="text-sm leading-5 text-secondary-200">Find a charger instantly. (Filter by plug type,
+                      speed, and price)</p>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-[21px] h-[21px] rounded-full bg-primary-500 flex items-center justify-center flex-shrink-0">
+                      <span class="text-sm font-medium text-secondary-950">2</span>
+                    </div>
+                    <p class="text-sm leading-5 text-secondary-200">Start charging in seconds. (One tap start)</p>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <div
+                      class="w-[21px] h-[21px] rounded-full bg-primary-500 flex items-center justify-center flex-shrink-0">
+                      <span class="text-sm font-medium text-secondary-950">3</span>
+                    </div>
+                    <p class="text-sm leading-5 text-secondary-200">Stay informed while charging. (Real time charging
+                      progress)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="flex gap-4 items-center">
+              <a href="#"
+                class="btn-primary-cta flex items-center justify-center px-[16px] py-[16px] w-[185px] bg-primary-400 border border-primary-400/80 text-secondary-950 text-base font-semibold rounded-lg hover:bg-primary-500 transition-colors">
+                Get the app
+              </a>
+            </div>
+          </div>
+
+          <!-- Right - Phone Mockup with parallax -->
+          <div
+            class="relative flex-shrink-0 max-lg:mx-auto otg-mockup self-end -bottom-[20px] max-md:self-center max-md:bottom-0"
+            id="otg-phone">
+            <!-- Wrapper clips the phone bottom (490px visible desktop, 642px mobile) -->
+            <div class="relative w-[314px] h-[490px] overflow-hidden max-md:w-[314px] max-md:h-[642px]">
+              <img src="images/3rd-section-mockup.png" alt="App Mockup" class="absolute top-0 left-0 w-full" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== AUTOMATED CHARGING SECTION ===================== -->
+  <section id="features" class="relative py-[100px] max-lg:py-16 overflow-hidden">
+    <div class="max-w-container mx-auto px-[76px] max-lg:px-6 max-md:px-4">
+      <div class="flex flex-col gap-[17px] items-center text-center mb-16 auto-header">
+        <div class="inline-flex items-center justify-center px-2.5 py-1 bg-[rgba(198,255,41,0.2)] rounded-md">
+          <span class="text-sm font-semibold text-secondary-50 font-inter">Automated navigation</span>
+        </div>
+        <h2
+          class="text-[40px] leading-[44px] font-semibold text-secondary-100 max-w-[1005px] max-md:text-[32px] max-md:leading-[44px]">
+          Automated charging, right when <span class="text-primary-400">you need it</span>
+        </h2>
+        <p class="text-base text-secondary-200 max-w-[553px]">
+          Never worry about running low &mdash; we'll guide you to the nearest available charging station at the right
+          time.
+        </p>
+      </div>
+      <div class="flex gap-5 items-stretch max-lg:flex-col max-md:gap-5">
+        <div
+          class="feature-card glass-card-auto flex flex-col gap-[30px] flex-1 pt-7 pb-8 px-6 rounded-lg overflow-hidden">
+          <div class="w-8 h-8 flex items-center justify-center">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C6FF29" stroke-width="1.5">
+              <circle cx="12" cy="12" r="3" />
+              <path
+                d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" />
+            </svg>
+          </div>
+          <div class="flex flex-col gap-3">
+            <h3 class="text-2xl font-semibold text-secondary-100 font-inter leading-[1.46]">Smart suggestions based on
+              your location</h3>
+            <p class="text-[15px] text-secondary-200 font-inter leading-[1.46]">Get relevant charging options nearby,
+              matched to where you are and where you're headed.</p>
+          </div>
+        </div>
+        <div
+          class="feature-card glass-card-auto flex flex-col gap-[30px] flex-1 pt-7 pb-8 px-6 rounded-lg overflow-hidden">
+          <div class="w-8 h-8 flex items-center justify-center">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C6FF29" stroke-width="1.5">
+              <rect x="2" y="6" width="20" height="12" rx="2" />
+              <line x1="6" y1="12" x2="6" y2="12" />
+              <line x1="22" y1="10" x2="22" y2="14" />
+              <path d="M6 12h4M10 10v4" />
+            </svg>
+          </div>
+          <div class="flex flex-col gap-3">
+            <h3 class="text-2xl font-semibold text-secondary-100 font-inter leading-[1.46]">Nearby charger
+              recommendations when battery is low</h3>
+            <p class="text-[15px] text-secondary-200 font-inter leading-[1.46]">Receive timely recommendations for
+              nearby chargers before range becomes a concern.</p>
+          </div>
+        </div>
+        <div
+          class="feature-card glass-card-auto flex flex-col gap-[30px] flex-1 pt-7 pb-8 px-6 rounded-lg overflow-hidden">
+          <div class="w-8 h-8 flex items-center justify-center">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C6FF29" stroke-width="1.5">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+          </div>
+          <div class="flex flex-col gap-3">
+            <h3 class="text-2xl font-semibold text-secondary-100 font-inter leading-[1.46]">Real-time availability
+              before you arrive</h3>
+            <p class="text-[15px] text-secondary-200 font-inter leading-[1.46]">Check live charger status so you know a
+              station is available before you get there.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA / READY TO CHARGE SECTION ===================== -->
+  <section id="cta" class="relative overflow-hidden max-lg:py-16">
+    <!-- Full-width map background (ignores side padding) -->
+    <div class="absolute inset-0 cta-bg-section"></div>
+    <!-- Top gradient overlay (dark fading down into map) -->
+    <div class="absolute top-0 left-0 right-0 h-[200px] bg-gradient-to-b from-secondary-950 to-transparent z-[1]"></div>
+    <!-- Bottom gradient overlay (dark fading up from bottom) -->
+    <div class="absolute bottom-0 left-0 right-0 h-[200px] bg-gradient-to-t from-secondary-950 to-transparent z-[1]">
+    </div>
+
+    <!-- Content inside padded container -->
+    <div class="relative z-[2] max-w-container mx-auto px-[76px] py-[80px] max-lg:px-6 max-md:px-4">
+      <div class="flex items-center justify-between max-lg:flex-col max-lg:gap-12 max-md:items-start">
+        <!-- Car on LEFT (matching Figma) -->
+        <div class="relative flex-shrink-0 cta-car">
+          <div class="car-glow absolute inset-0 blur-3xl bg-primary-500/10 rounded-full"></div>
+          <img src="images/car.png" alt="EV Car" class="relative w-[430px] max-lg:w-[300px]" />
+        </div>
+        <!-- Text on RIGHT (matching Figma) -->
+        <div class="flex flex-col gap-12 max-w-[646px] cta-content">
+          <div class="flex flex-col gap-5">
+            <h2 class="text-[32px] leading-[44px] text-secondary-100">
+              <span class="font-light">Ready to charge smarter? </span><span class="font-semibold">Take control </span>
+              <span class="font-semibold">of EV charging</span>
+            </h2>
+            <p class="text-base text-secondary-200 max-w-[553px]">
+              Download the app to start charging smarter today, or join the waitlist for early access in your area.
+            </p>
+          </div>
+          <div class="flex items-center">
+            <a href="#"
+              class="btn-primary-cta flex items-center justify-center px-[16px] py-[16px] w-[185px] bg-primary-400 border border-primary-400/80 text-secondary-950 text-base font-semibold rounded-lg hover:bg-primary-500 transition-colors">
+              Get the app
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FULL CONTROL FROM HOME SECTION ===================== -->
+  <section id="full-control" class="relative py-[100px] max-lg:py-16 overflow-hidden">
+    <div class="max-w-container mx-auto px-[76px] max-lg:px-6 max-md:px-4">
+      <div class="flex flex-col gap-[17px] items-center text-center mb-16 home-header">
+        <h2
+          class="text-[40px] leading-[44px] font-semibold text-secondary-100 max-md:text-[32px] max-md:leading-[44px]">
+          Full control, right <span class="text-primary-400">from home</span>
+        </h2>
+        <p class="text-base text-secondary-200 max-w-[553px]">
+          Manage your home charger effortlessly, whenever you need it.
+        </p>
+      </div>
+      <div class="flex gap-6 items-start">
+        <div class="grid grid-cols-2 gap-5 flex-1 max-md:grid-cols-1 max-md:gap-3">
+          <div
+            class="home-card glass-card-auto flex flex-col items-start justify-between p-5 rounded-lg min-h-[168px] overflow-hidden">
+            <div class="w-8 h-8 flex items-center justify-center">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6FF29" stroke-width="1.5">
+                <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                <polyline points="9 22 9 12 15 12 15 22" />
+              </svg>
+            </div>
+            <div class="flex flex-col gap-3">
+              <h3 class="text-lg font-semibold text-secondary-100 font-inter leading-[1.46]">Home control</h3>
+              <p class="text-base text-secondary-200 font-inter leading-[1.46]">Simple control for everyday charging</p>
+            </div>
+          </div>
+          <div
+            class="home-card glass-card-auto flex flex-col items-start justify-between p-5 rounded-lg min-h-[168px] overflow-hidden">
+            <div class="w-8 h-8 flex items-center justify-center">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6FF29" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            </div>
+            <div class="flex flex-col gap-3">
+              <h3 class="text-lg font-semibold text-secondary-100 font-inter leading-[1.46]">Scheduling</h3>
+              <p class="text-base text-secondary-200 font-inter leading-[1.46]">Set it once, charge automatically</p>
+            </div>
+          </div>
+          <div
+            class="home-card glass-card-auto flex flex-col items-start justify-between p-5 rounded-lg min-h-[168px] overflow-hidden">
+            <div class="w-8 h-8 flex items-center justify-center">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6FF29" stroke-width="1.5">
+                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+              </svg>
+            </div>
+            <div class="flex flex-col gap-3">
+              <h3 class="text-lg font-semibold text-secondary-100 font-inter leading-[1.46]">Off-peak savings</h3>
+              <p class="text-base text-secondary-200 font-inter leading-[1.46]">Lower costs, smarter charging</p>
+            </div>
+          </div>
+          <div
+            class="home-card glass-card-auto flex flex-col items-start justify-between p-5 rounded-lg min-h-[168px] overflow-hidden">
+            <div class="w-8 h-8 flex items-center justify-center">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C6FF29" stroke-width="1.5">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>
+            </div>
+            <div class="flex flex-col gap-3">
+              <h3 class="text-lg font-semibold text-secondary-100 font-inter leading-[1.46]">Monitoring</h3>
+              <p class="text-base text-secondary-200 font-inter leading-[1.46]">Monitoring and alerts</p>
+            </div>
+          </div>
+        </div>
+        <div class="flex-shrink-0 max-lg:mx-auto home-image">
+          <img src="images/control-from-home-image.png" alt="Control from Home"
+            class="w-[288px] rounded-xl max-lg:w-full max-lg:max-w-[288px]" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TESTIMONIALS SECTION ===================== -->
+  <section id="testimonials" class="relative py-[100px] max-lg:py-16 overflow-hidden">
+    <div class="max-w-container mx-auto px-[76px] max-lg:px-6 max-md:px-4">
+      <div class="flex flex-col gap-10 mb-10">
+        <div
+          class="inline-flex items-center justify-center px-2.5 py-3 bg-[rgba(198,255,41,0.2)] rounded-lg w-fit testimonial-badge">
+          <span class="text-sm text-white tracking-[-0.28px]">What people say about EV</span>
+        </div>
+        <div class="flex items-center justify-between testimonial-header">
+          <h2 class="text-[32px] leading-[50px] text-white tracking-[-0.64px] max-w-[830px]">
+            Real experiences, real convenience, <span class="text-primary-400">Trusted by drivers like you</span>
+          </h2>
+          <div class="flex gap-4 max-md:hidden">
+            <button id="testimonial-prev"
+              class="w-[53px] h-[53px] rounded-full border border-secondary-200/30 flex items-center justify-center hover:border-primary-400 transition-colors">
+              <svg width="16" height="13" viewBox="0 0 16 13" fill="none" stroke="white" stroke-width="1.5">
+                <path d="M15 6.5H1M1 6.5L6.5 1M1 6.5L6.5 12" />
+              </svg>
+            </button>
+            <button id="testimonial-next"
+              class="w-[53px] h-[53px] rounded-full border border-secondary-200/30 flex items-center justify-center hover:border-primary-400 transition-colors">
+              <svg width="16" height="13" viewBox="0 0 16 13" fill="none" stroke="white" stroke-width="1.5">
+                <path d="M1 6.5H15M15 6.5L9.5 1M15 6.5L9.5 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="overflow-hidden testimonial-carousel" style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+        <div id="testimonial-track" class="flex gap-5 transition-transform duration-500 ease-out">
+          <div
+            class="testimonial-card bg-glass-bg rounded-[20px] overflow-hidden px-[37px] py-[62px] flex-shrink-0 w-[375px] max-md:w-[300px]">
+            <div class="flex flex-col gap-[50px]">
+              <div class="flex flex-col gap-5">
+                <h4 class="text-xl font-medium text-secondary-50 leading-6">live updates</h4>
+                <p class="text-base font-light text-secondary-200 leading-6 max-w-[301px]">I never worry about running
+                  out of charge anymore. The app guides me to nearby stations and the live updates give me peace of
+                  mind.</p>
+              </div>
+              <div class="flex flex-col gap-[35px]">
+                <div class="h-px w-full relative">
+                  <div class="absolute left-0 top-0 w-[285px] h-px bg-secondary-200/20"></div>
+                  <div class="absolute left-0 top-0 w-[84px] h-px bg-primary-500"></div>
+                </div>
+                <div class="flex gap-[11px] items-center">
+                  <div class="w-[44px] h-[44px] rounded-full bg-secondary-500 overflow-hidden"><img
+                      src="images/avatar-adeel.jpg" alt="Adeel K" class="w-full h-full object-cover" /></div>
+                  <div class="flex flex-col gap-2.5">
+                    <p class="text-base font-semibold text-secondary-50">Adeel K</p>
+                    <p class="text-base font-light text-secondary-100">Pickme Driver</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="testimonial-card bg-glass-bg rounded-[20px] overflow-hidden px-[37px] py-[62px] flex-shrink-0 w-[398px] max-md:w-[300px]">
+            <div class="flex flex-col gap-[50px]">
+              <div class="flex flex-col gap-5">
+                <h4 class="text-xl font-medium text-secondary-50 leading-6">save on electricity</h4>
+                <p class="text-base font-light text-secondary-200 leading-6 max-w-[324px]">Setting up my home charger
+                  was so simple. I can schedule overnight charging and save on electricity automatically.</p>
+              </div>
+              <div class="flex flex-col gap-[35px]">
+                <div class="h-px w-full relative">
+                  <div class="absolute left-0 top-0 w-[285px] h-px bg-secondary-200/20"></div>
+                  <div class="absolute left-0 top-0 w-[84px] h-px bg-primary-500"></div>
+                </div>
+                <div class="flex gap-[11px] items-center">
+                  <div class="w-[44px] h-[44px] rounded-full bg-secondary-500 overflow-hidden"><img
+                      src="images/avatar-maya.jpg" alt="Maya R" class="w-full h-full object-cover" /></div>
+                  <div class="flex flex-col gap-2.5">
+                    <p class="text-base font-semibold text-secondary-50">Maya R</p>
+                    <p class="text-base font-light text-secondary-200">IT Manager</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="testimonial-card bg-glass-bg rounded-[20px] overflow-hidden px-[37px] py-[62px] flex-shrink-0 w-[375px] max-md:w-[300px]">
+            <div class="flex flex-col gap-[50px]">
+              <div class="flex flex-col gap-5">
+                <h4 class="text-xl font-medium text-secondary-50 leading-6 font-dm">fast, and reliable</h4>
+                <p class="text-base font-light text-secondary-200 leading-6 max-w-[301px] font-inter">Finding public
+                  chargers used to be stressful, especially in the city. This app makes it effortless, fast, and
+                  reliable</p>
+              </div>
+              <div class="flex flex-col gap-[35px]">
+                <div class="h-px w-full relative">
+                  <div class="absolute left-0 top-0 w-[285px] h-px bg-secondary-200/20"></div>
+                  <div class="absolute left-0 top-0 w-[84px] h-px bg-primary-500"></div>
+                </div>
+                <div class="flex gap-[11px] items-center">
+                  <div class="w-[44px] h-[44px] rounded-full bg-secondary-500 overflow-hidden"><img
+                      src="images/avatar-sam.jpg" alt="Sam V" class="w-full h-full object-cover" /></div>
+                  <div class="flex flex-col gap-2.5">
+                    <p class="text-base font-semibold text-secondary-50 font-dm">Sam V</p>
+                    <p class="text-base font-light text-secondary-100 font-inter">Software Engineer</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="testimonial-card bg-glass-bg rounded-[20px] overflow-hidden px-[37px] py-[62px] flex-shrink-0 w-[375px] max-md:w-[300px]">
+            <div class="flex flex-col gap-[50px]">
+              <div class="flex flex-col gap-5">
+                <h4 class="text-xl font-semibold text-secondary-50 leading-6 font-dm">No more guessing!</h4>
+                <p class="text-base font-light text-secondary-200 leading-6 max-w-[301px] font-inter">I love the
+                  notifications &mdash; it tells me exactly when to head to a charger and which one is free. No more
+                  guessing!</p>
+              </div>
+              <div class="flex flex-col gap-[35px]">
+                <div class="h-px w-full relative">
+                  <div class="absolute left-0 top-0 w-[285px] h-px bg-secondary-200/20"></div>
+                  <div class="absolute left-0 top-0 w-[84px] h-px bg-primary-500"></div>
+                </div>
+                <div class="flex gap-[11px] items-center">
+                  <div class="w-[44px] h-[44px] rounded-full bg-secondary-500 overflow-hidden"><img
+                      src="images/avatar-sam2.jpg" alt="Sam V" class="w-full h-full object-cover" /></div>
+                  <div class="flex flex-col gap-2.5">
+                    <p class="text-base font-semibold text-white font-dm">Sam V</p>
+                    <p class="text-base font-light text-white font-inter">QFI Miner</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Mobile testimonial navigation buttons (shown only on mobile) -->
+      <div class="hidden max-md:flex gap-4 mt-6 testimonial-mobile-nav" style="display:none;">
+        <button
+          class="testimonial-mobile-prev w-[53px] h-[53px] rounded-full border border-secondary-200/30 flex items-center justify-center hover:border-primary-400 transition-colors">
+          <svg width="16" height="13" viewBox="0 0 16 13" fill="none" stroke="white" stroke-width="1.5">
+            <path d="M15 6.5H1M1 6.5L6.5 1M1 6.5L6.5 12" />
+          </svg>
+        </button>
+        <button
+          class="testimonial-mobile-next w-[53px] h-[53px] rounded-full border border-secondary-200/30 flex items-center justify-center hover:border-primary-400 transition-colors">
+          <svg width="16" height="13" viewBox="0 0 16 13" fill="none" stroke="white" stroke-width="1.5">
+            <path d="M1 6.5H15M15 6.5L9.5 1M15 6.5L9.5 12" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== JOURNEY PLANNER SECTION ===================== -->
+  <section id="journey" class="relative py-[80px] max-lg:py-16">
+    <div class="max-w-container mx-auto px-[76px] max-lg:px-6 max-md:px-4">
+      <div
+        class="relative bg-glass-bg rounded-[20px] overflow-hidden py-[98px] px-[76px] min-h-[400px] max-lg:px-8 max-lg:py-16 max-md:px-4 max-md:py-[53px]">
+        <div class="absolute -left-[160px] -top-[61px] w-[558px] h-[558px] rounded-full"
+          style="background: radial-gradient(circle, rgba(198,255,41,0.08) 0%, transparent 70%);"></div>
+        <div class="absolute -left-[215px] -top-[174px] w-[558px] h-[558px] rounded-full"
+          style="background: radial-gradient(circle, rgba(198,255,41,0.06) 0%, transparent 70%);"></div>
+        <div class="absolute right-[-200px] top-[-267px] w-[558px] h-[558px] rounded-full"
+          style="background: radial-gradient(circle, rgba(198,255,41,0.06) 0%, transparent 70%);"></div>
+        <div class="relative flex flex-col gap-8 items-center justify-center text-center journey-content">
+          <div class="flex flex-col gap-[30px] items-center justify-center">
+            <h2
+              class="text-[32px] leading-[45px] font-medium text-secondary-50 max-w-[719px] max-md:text-[28px] max-md:leading-[45px]">
+              Never Run Out of Charge Again: Plan Your <span class="text-primary-400">Journey with Ease</span>
+            </h2>
+            <p class="text-base font-light text-secondary-200 leading-[1.6] max-w-[689px]">
+              Locate nearby charging stations, check real-time availability, and plan your journey effortlessly.
+              Everything you need to keep your EV moving is right at your fingertips&mdash;fast, simple, and reliable.
+            </p>
+          </div>
+          <div class="flex gap-4 items-center max-md:gap-3">
+            <a href="#"
+              class="btn-primary-cta flex items-center justify-center px-[16px] py-[16px] w-[185px] bg-primary-400 border border-primary-400/80 text-secondary-950 text-base font-semibold rounded-lg hover:bg-primary-500 transition-colors max-md:flex-1 max-md:w-auto">Get
+              the app</a>
+            <a href="#"
+              class="flex items-center justify-center px-[16px] py-[16px] w-[185px] bg-[rgba(218,255,116,0.1)] border border-white/20 text-secondary-50 text-base font-semibold rounded-lg hover:bg-[rgba(218,255,116,0.2)] transition-colors max-md:flex-1 max-md:w-auto">Join
+              the waitlist</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="relative pt-16 pb-8">
+    <div class="max-w-container mx-auto px-[76px] max-lg:px-6 max-md:px-4">
+      <div
+        class="flex justify-between items-start pb-12 border-b border-secondary-200/10 max-lg:flex-col max-lg:gap-10">
+        <div class="max-w-[360px]">
+          <img src="images/logo.png" alt="EV Logo" class="h-6 mb-4" />
+          <p class="text-sm text-secondary-200 leading-6">Get the app to find nearby EV chargers, get notified when
+            one's available, and explore 1,000+ charging stations with ease. Charging made simple.</p>
+        </div>
+        <div class="flex gap-20 max-md:flex-col max-md:gap-10">
+          <div class="flex flex-col gap-4">
+            <h4 class="text-sm font-semibold text-secondary-50 uppercase tracking-wider max-md:text-xl">Company</h4>
+            <a href="#" class="text-sm text-secondary-200 hover:text-primary-400 transition-colors">About</a>
+            <a href="#" class="text-sm text-secondary-200 hover:text-primary-400 transition-colors">Careers</a>
+            <a href="#" class="text-sm text-secondary-200 hover:text-primary-400 transition-colors">Press</a>
+            <a href="#" class="text-sm text-secondary-200 hover:text-primary-400 transition-colors">Blog</a>
+          </div>
+          <div class="flex flex-col gap-4">
+            <h4 class="text-sm font-semibold text-secondary-50 uppercase tracking-wider max-md:text-xl">Features</h4>
+            <a href="#" class="text-sm text-secondary-200 hover:text-primary-400 transition-colors">Find Chargers</a>
+            <a href="#" class="text-sm text-secondary-200 hover:text-primary-400 transition-colors">Trip Planner</a>
+            <a href="#" class="text-sm text-secondary-200 hover:text-primary-400 transition-colors">Home Charging</a>
+            <a href="#" class="text-sm text-secondary-200 hover:text-primary-400 transition-colors">Notifications</a>
+          </div>
+          <div class="flex flex-col gap-4">
+            <h4 class="text-sm font-semibold text-secondary-50 uppercase tracking-wider max-md:text-xl">Community</h4>
+            <a href="#"
+              class="flex items-center gap-2 text-sm text-secondary-200 hover:text-primary-400 transition-colors"><svg
+                width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.075.075 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z" />
+              </svg>Discord</a>
+            <a href="#"
+              class="flex items-center gap-2 text-sm text-secondary-200 hover:text-primary-400 transition-colors"><svg
+                width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+              </svg>Twitter</a>
+            <a href="#"
+              class="flex items-center gap-2 text-sm text-secondary-200 hover:text-primary-400 transition-colors"><svg
+                width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+              </svg>Telegram</a>
+            <a href="#"
+              class="flex items-center gap-2 text-sm text-secondary-200 hover:text-primary-400 transition-colors"><svg
+                width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
+              </svg>Instagram</a>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-between pt-8 max-md:flex-col max-md:gap-4">
+        <p class="text-sm text-secondary-200">&copy; 2026 Ev Charge all right reserved.</p>
+        <div class="flex gap-6">
+          <a href="#" class="text-sm text-secondary-200 hover:text-primary-400 transition-colors">Privacy</a>
+          <a href="#" class="text-sm text-secondary-200 hover:text-primary-400 transition-colors">Terms</a>
+          <a href="#" class="text-sm text-secondary-200 hover:text-primary-400 transition-colors">Contact</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- GSAP CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/MotionPathPlugin.min.js"></script>
+
+  <!-- Animation Logic -->
+  <script src="js/animations.js"></script>
+  <script>
+    (function () {
+      var btns = document.querySelectorAll('.btn-primary-cta');
+      for (var i = 0; i < btns.length; i++) {
+        var btn = btns[i];
+        if (btn.querySelector('.btn-primary-cta-snake')) continue;
+        var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('class', 'btn-primary-cta-snake');
+        svg.setAttribute('aria-hidden', 'true');
+        svg.setAttribute('width', '100%');
+        svg.setAttribute('height', '100%');
+        svg.setAttribute('viewBox', '0 0 100 100');
+        svg.setAttribute('preserveAspectRatio', 'none');
+        var rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', '1');
+        rect.setAttribute('y', '1');
+        rect.setAttribute('width', '98');
+        rect.setAttribute('height', '98');
+        rect.setAttribute('rx', '8');
+        rect.setAttribute('ry', '8');
+        svg.appendChild(rect);
+        btn.insertBefore(svg, btn.firstChild);
+      }
+    })();
+  </script>
+
+  <!-- Animated Favicon: switches between green and white "Ev" logos -->
+  <script>
+    (function () {
+      var favicon = document.getElementById('favicon');
+      if (!favicon) return;
+
+      // Favicon image paths
+      var icons = [
+        'assets/icons/favicon-green.png',
+        'assets/icons/favicon-white.png'
+      ];
+      var current = 0;
+
+      // Switch interval in milliseconds (1.5s for smooth visual rhythm)
+      var SWITCH_INTERVAL = 1500;
+
+      setInterval(function () {
+        current = (current + 1) % icons.length;
+        favicon.href = icons[current];
+      }, SWITCH_INTERVAL);
+    })();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,468 @@
+/* ===================== GLOBAL STYLES ===================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  scroll-padding-top: 80px; /* offset for fixed nav when scrolling to anchors */
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Smoother scroll: GPU-accelerated rendering for scroll-triggered elements */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Smooth scroll: promote animated elements to GPU layer for 60fps during scroll */
+.charging-image-area,
+.charging-card,
+.charging-title,
+.charging-feature-card,
+.otg-content,
+.otg-mockup,
+.auto-header,
+.feature-card,
+.cta-content,
+.cta-car,
+.home-header,
+.home-card,
+.home-image,
+.testimonial-badge,
+.testimonial-header,
+.testimonial-carousel,
+.journey-content {
+  will-change: transform, opacity;
+}
+
+/* Hide scrollbar for carousel */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ===================== GLASSMORPHISM CARDS ===================== */
+.glass-card {
+  background: rgba(96, 98, 113, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid #3F404C;
+  border-radius: 20px;
+}
+
+.glass-card-large {
+  background: rgba(96, 98, 113, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 20px;
+}
+
+.glass-card-small {
+  background: rgba(96, 98, 113, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 8px;
+  /* Smooth scroll: cubic-bezier for natural hover feel */
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.glass-card-small:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(198, 255, 41, 0.06);
+}
+
+.glass-card-auto {
+  background: rgba(96, 98, 113, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 8px;
+  /* Smooth scroll: cubic-bezier for natural hover feel */
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.glass-card-auto:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 12px 40px rgba(198, 255, 41, 0.08);
+}
+
+/* ===================== GRADIENT ORBS ===================== */
+.gradient-orb {
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ===================== NAVIGATION ===================== */
+#navbar {
+  background: transparent;
+}
+
+#navbar.scrolled {
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(63, 64, 76, 0.3);
+}
+
+/* Hamburger Animation */
+#mobile-menu-btn.active #hamburger-1 {
+  transform: rotate(45deg) translateY(4px);
+}
+#mobile-menu-btn.active #hamburger-2 {
+  opacity: 0;
+}
+#mobile-menu-btn.active #hamburger-3 {
+  transform: rotate(-45deg) translateY(-4px);
+}
+
+/* ===================== HERO SECTION ===================== */
+#hero {
+  background: #0A0A0A;
+}
+
+/* ===================== PRIMARY CTA – SNAKE BORDER + GLASS (reusable) =====================
+   Aligned with btn-101 style; design tokens only: primary-100, primary-400, primary-500
+   Glass background, snake stroke on hover, glow filter.
+*/
+.btn-primary-cta,
+.btn-primary-cta *,
+.btn-primary-cta::before,
+.btn-primary-cta::after {
+  box-sizing: border-box;
+}
+
+.btn-primary-cta {
+  --primary-100: #F6FFDF;
+  --primary-400: #DAFF74;
+  --primary-500: #C6FF29;
+  --btn-snake-color: #C6FF29;
+  --btn-snake-opacity: 0.7;
+  --btn-thickness: 2px;
+  --btn-roundness: 8px;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: none;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  background: rgba(198, 255, 116, 0.2);
+  color: var(--secondary-950, #0A0A0A);
+  transition: transform 0.2s ease, filter 0.2s ease, background 0.2s ease;
+  box-shadow: 0 0 0 1px rgba(198, 255, 41, 0.2);
+}
+
+.btn-primary-cta:hover {
+  background: rgba(198, 255, 116, 0.35);
+  filter: brightness(1.08);
+  box-shadow: 0 0 0 1px rgba(198, 255, 41, 0.35);
+}
+
+.btn-primary-cta:active {
+  --btn-snake-opacity: 0.5;
+  background: rgba(198, 255, 116, 0.15);
+  transform: scale(0.98);
+}
+
+/* SVG snake border – absolute, same size as button */
+.btn-primary-cta .btn-primary-cta-snake {
+  border-radius: inherit;
+  display: block;
+  filter: url(#btn-glow-primary);
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  pointer-events: none;
+}
+
+.btn-primary-cta .btn-primary-cta-snake rect {
+  fill: none;
+  stroke: var(--btn-snake-color);
+  stroke-width: var(--btn-thickness);
+  rx: 8;
+  ry: 8;
+  stroke-linejoin: round;
+  stroke-dasharray: 185%;
+  stroke-dashoffset: 80;
+  animation: btn-snake 2s linear infinite;
+  animation-play-state: paused;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.btn-primary-cta:hover .btn-primary-cta-snake rect {
+  animation-play-state: running;
+  opacity: var(--btn-snake-opacity);
+}
+
+@keyframes btn-snake {
+  to { stroke-dashoffset: 370%; }
+}
+
+/* Label / content above the SVG */
+.btn-primary-cta .btn-primary-cta-label,
+.btn-primary-cta > span:not(.btn-primary-cta-snake) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Respect reduced motion: no snake animation */
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary-cta .btn-primary-cta-snake rect {
+    animation: none;
+    stroke-dashoffset: 0;
+    stroke-dasharray: none;
+  }
+  .btn-primary-cta:hover .btn-primary-cta-snake rect {
+    opacity: var(--btn-snake-opacity);
+  }
+}
+
+.hero-map-bg {
+  background-image: url('../images/hero-section-map.png');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+#hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, #0A0A0A);
+  z-index: 1;
+}
+
+/* Hero route path glow */
+.hero-route-line {
+  filter: drop-shadow(0 0 6px rgba(198, 255, 41, 0.6));
+}
+
+/* Car glow effect */
+.car-glow {
+  animation: carGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes carGlow {
+  0% { opacity: 0.3; transform: scale(1); }
+  100% { opacity: 0.6; transform: scale(1.1); }
+}
+
+/* ===================== CHARGING UPDATES SECTION ===================== */
+#charging-updates {
+  position: relative;
+}
+
+.charging-bg-image {
+  background-image: url('../images/2nd-section-image.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* ===================== CTA SECTION ===================== */
+#cta {
+  position: relative;
+}
+
+.cta-bg-section {
+  background-image: url('../images/map.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* Full-width background - no side padding, spans entire section */
+  width: 100%;
+  height: 100%;
+}
+
+/* ===================== PROGRESS BAR ===================== */
+.progress-bar {
+  transition: width 2s ease-out;
+}
+
+/* ===================== FEATURE CARDS ===================== */
+.feature-card {
+  /* Smooth scroll: cubic-bezier for natural hover feel */
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border: 1px solid transparent;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(198, 255, 41, 0.06);
+  border-color: rgba(198, 255, 41, 0.15);
+}
+
+/* ===================== TESTIMONIAL CAROUSEL ===================== */
+.testimonial-card {
+  /* Smooth scroll: cubic-bezier for natural hover feel */
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.testimonial-card:hover {
+  transform: scale(1.02);
+}
+
+/* ===================== RESPONSIVE ===================== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .max-w-container {
+    max-width: 100% !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  /* Hero heading matches Figma mobile: 40px/49px */
+  #hero h1 {
+    font-size: 40px;
+    line-height: 49px;
+  }
+
+  .hero-stats > div {
+    padding: 0;
+  }
+
+  /* Stats numbers 32px on mobile per Figma */
+  .hero-stats .counter,
+  .hero-stats span:first-child {
+    font-size: 32px;
+  }
+
+  /* Stats labels 16px on mobile per Figma */
+  .hero-stats span:last-child {
+    font-size: 16px;
+  }
+
+  /* Charging section: hide image area on mobile, show only text+cards */
+  .charging-image-area {
+    display: none !important;
+  }
+
+  /* Feature cards in charging section: full width single column */
+  .charging-feature-card {
+    min-height: 142px;
+  }
+
+  /* On The Go: button full width on mobile */
+  #on-the-go .otg-content a[href="#"] {
+    width: 100%;
+  }
+
+  /* Testimonial cards keep usable width on mobile */
+  .testimonial-card {
+    width: 300px !important;
+  }
+
+  /* CTA: hide car on mobile per Figma */
+  .cta-car {
+    display: none !important;
+  }
+
+  /* CTA: button full width */
+  #cta .cta-content a[href="#"] {
+    width: 100%;
+  }
+
+  /* Full Control: hide side image on mobile per Figma */
+  .home-image {
+    display: none !important;
+  }
+
+  /* Testimonials mobile nav buttons */
+  .testimonial-mobile-nav {
+    display: flex !important;
+  }
+}
+
+/* ===================== SELECTION ===================== */
+::selection {
+  background: rgba(198, 255, 41, 0.3);
+  color: #fff;
+}
+
+/* ===================== SMOOTH REVEAL UTILITY ===================== */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-40px);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(40px);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+/* ===================== GSAP SAFETY FALLBACK ===================== */
+@keyframes cssForceReveal {
+  to {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+body.gsap-pending #hero-car,
+body.gsap-pending .hero-title,
+body.gsap-pending .hero-subtitle,
+body.gsap-pending .hero-buttons,
+body.gsap-pending .hero-note,
+body.gsap-pending .hero-stats,
+body.gsap-pending #hero-map,
+body.gsap-pending #hero-route-svg,
+body.gsap-pending .hero-marker,
+body.gsap-pending #hero-popup-card,
+body.gsap-pending .charging-image-area,
+body.gsap-pending .charging-card,
+body.gsap-pending .charging-title,
+body.gsap-pending .charging-feature-card,
+body.gsap-pending .otg-content,
+body.gsap-pending .otg-mockup,
+body.gsap-pending .auto-header,
+body.gsap-pending .feature-card,
+body.gsap-pending .cta-content,
+body.gsap-pending .cta-car,
+body.gsap-pending .home-header,
+body.gsap-pending .home-card,
+body.gsap-pending .home-image,
+body.gsap-pending .testimonial-badge,
+body.gsap-pending .testimonial-header,
+body.gsap-pending .testimonial-carousel,
+body.gsap-pending .journey-content {
+  animation: cssForceReveal 0.01s ease-out 3s forwards;
+}
+
+/* ===================== REDUCED MOTION ===================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
