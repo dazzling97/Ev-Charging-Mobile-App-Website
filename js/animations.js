@@ -22,6 +22,7 @@ var _hiddenSelectors = [
   '#hero-map', '.hero-title', '.hero-subtitle', '.hero-buttons',
   '.hero-note', '.hero-stats', '#hero-route-svg', '#hero-car',
   '.hero-marker', '#hero-popup-card', '.hero-glow-start', '.hero-glow-end',
+  '.logo-carousel-content',
   '.charging-image-area', '.charging-card', '.charging-title', '.charging-feature-card',
   '#charging-dotted-line', '#charging-endpoint',
   '.otg-content', '.otg-mockup',
@@ -494,6 +495,23 @@ function initJourneyPlanner() {
 }
 
 /* =====================================================
+   LOGO CAROUSEL SECTION
+   Scroll-triggered fade-in reveal
+   ===================================================== */
+function initLogoCarousel() {
+  gsap.set('.logo-carousel-content', { opacity: 0, y: 20 });
+
+  ScrollTrigger.create({
+    trigger: '#logo-carousel',
+    start: 'top 90%',
+    once: true,
+    onEnter: function () {
+      gsap.to('.logo-carousel-content', { opacity: 1, y: 0, duration: 1.2, ease: 'power3.out' });
+    }
+  });
+}
+
+/* =====================================================
    COUNTER UTILITY
    ===================================================== */
 function animateCounter(selector, from, to, duration) {
@@ -524,6 +542,7 @@ function animateCounter(selector, from, to, duration) {
 
   initNavigation();
   initHeroAnimations();
+  initLogoCarousel();
   initChargingUpdates();
   initOnTheGo();
   initAutomatedCharging();

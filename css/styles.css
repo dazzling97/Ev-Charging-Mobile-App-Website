@@ -19,6 +19,7 @@ body {
 }
 
 /* Smooth scroll: promote animated elements to GPU layer for 60fps during scroll */
+.logo-carousel-content,
 .charging-image-area,
 .charging-card,
 .charging-title,
@@ -262,6 +263,29 @@ body {
   100% { opacity: 0.6; transform: scale(1.1); }
 }
 
+/* ===================== LOGO CAROUSEL SECTION ===================== */
+#logo-carousel .max-w-container {
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 40%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 40%, black 92%, transparent 100%);
+}
+
+.logo-carousel-track {
+  animation: logoScroll 20s linear infinite;
+}
+
+.logo-carousel-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes logoScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 /* ===================== CHARGING UPDATES SECTION ===================== */
 #charging-updates {
   position: relative;
@@ -435,6 +459,7 @@ body.gsap-pending #hero-map,
 body.gsap-pending #hero-route-svg,
 body.gsap-pending .hero-marker,
 body.gsap-pending #hero-popup-card,
+body.gsap-pending .logo-carousel-content,
 body.gsap-pending .charging-image-area,
 body.gsap-pending .charging-card,
 body.gsap-pending .charging-title,
